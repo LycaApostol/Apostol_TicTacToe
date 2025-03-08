@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<div>
+    <div id="board" class="d-grid">
+        <button class="cell" id="0"></button>
+        <button class="cell" id="1"></button>
+        <button class="cell" id="2"></button>
+        <button class="cell" id="3"></button>
+        <button class="cell" id="4"></button>
+        <button class="cell" id="5"></button>
+        <button class="cell" id="6"></button>
+        <button class="cell" id="7"></button>
+        <button class="cell" id="8"></button>
+    </div>
+
+    <!-- Status Card (Hidden by Default) -->
+    <div id="status-card" class="status-card">
+        <p id="status">Game Status Here</p>
+    </div>
+
+    <!-- Centered Restart Button -->
+    <div style="display: flex; justify-content: center; margin-top: 20px;">
+        <button id="restart" class="btn btn-primary">Restart</button>
+    </div>
+</div>
+
+<script src="~/js/site.js"></script>

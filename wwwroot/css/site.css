@@ -1,92 +1,124 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
+/* General Styles */
 body {
     margin-bottom: 60px;
-    background-color: #4F7942; /* fern green background */
-    color: #333; /* Default text color */
+    background-image: url('https://mrwallpaper.com/images/hd/amazing-gravity-falls-landscape-k59ptw8p2tpzpxit.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    color: #F7F7F2;
+    font-family: 'Poppins', sans-serif;
 }
 
+/* Navbar */
 .navbar {
-    background-color: #93C572 !important; /* pistacho color */
+    background-color: rgba(132, 169, 140, 0.9) !important;
+    border-radius: 8px;
 }
 
     .navbar a {
-        color: white !important; /* Change text color */
+        color: white !important;
     }
 
         .navbar a:hover {
-            color: #000000 !important; /* Change hover color */
+            color: #354F52 !important;
         }
 
+/* Center Everything */
+.game-container {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.center-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+/* Title Styling */
+.game-title {
+    font-size: 2.5em;
+    color: #354F52;
+    margin-bottom: 10px;
+}
+
+/* Scoreboard */
+.scoreboard {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    color: #52796F;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 10px;
+    width: fit-content;
+    margin: 0 auto 20px;
+}
+
+.score {
+    font-weight: bold;
+}
+
+/* Center Game Board */
 .d-grid {
     display: grid;
     grid-template-columns: repeat(3, 100px);
     grid-template-rows: repeat(3, 100px);
-    gap: 5px;
-    margin: 20px auto;
+    gap: 8px;
+    margin: 50px auto 0;
     justify-content: center;
-
 }
 
+/* Game Cells */
 .cell {
     width: 100px;
     height: 100px;
-    font-size: 3em;
+    font-size: 2.5em;
     text-align: center;
-    background-color: white;
-    border: 1px solid black;
+    background-color: #F7F7F2;
+    border: 2px solid #52796F;
+    color: #354F52;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
     .cell:hover {
-        background-color: #ECFFDC; /* nyanza when hovered */
+        background-color: rgba(167, 196, 160, 0.8);
         cursor: pointer;
     }
 
-
-    .cell:disabled {
-        background-color: #ccc;
-        color: black;
-        border: 2px solid darkgray;
-    }
-
+/* Status Card */
 #status-card {
-    display: none; /* Initially hidden */
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin: 20px auto; /* Center Horizontally */
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 10px;
+    display: none;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #354F52;
+    padding: 15px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    font-size: 1em;
-}
-#restart {
-    display: block;
-    margin: 20px auto;/*centers the btn*/
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
 }
 
-#status {
-    font-size: 1.5em;
+.hidden {
+    display: none;
 }
+
+/* Buttons */
+.btn {
+    background-color: #52796F;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+    .btn:hover {
+        background-color: #354F52;
+    }

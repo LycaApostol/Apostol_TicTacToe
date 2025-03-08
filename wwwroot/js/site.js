@@ -1,84 +1,110 @@
-﻿document.addEventListener("DOMContentLoaded", function () {
-    const cells = document.querySelectorAll(".cell");
-    const statusCard = document.getElementById("status-card");
-    const status = document.getElementById("status");
-    const restartBtn = document.getElementById("restart");
-    let board = ["", "", "", "", "", "", "", "", ""];
-    let currentPlayer = "X";
-    let gameActive = true;
+﻿const board = document.getElementById("board");
+const cells = document.querySelectorAll(".cell");
+const restartBtn = document.getElementById("restart");
+const aiToggleBtn = document.getElementById("ai-toggle");
+const statusCard = document.getElementById("status-card");
+const statusText = document.getElementById("status");
+const catScoreEl = document.getElementById("cat-score");
+const dogScoreEl = document.getElementById("dog-score");
+const drawScoreEl = document.getElementById("draw-score");
 
-    function checkWinner() {
-        const winPatterns = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
-            [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
-            [0, 4, 8], [2, 4, 6]            // Diagonals
-        ];
+let boardState = ["", "", "", "", "", "", "", "", ""];
+let currentPlayer = "🐱";
+let aiEnabled = false;
+let scores = { cat: 0, dog: 0, draw: 0 };
 
-        for (let pattern of winPatterns) {
-            const [a, b, c] = pattern;
-            if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-                gameActive = false;
-                status.innerText = `Player ${board[a]} Wins!`;
-                statusCard.style.display = "flex"; // Show status card
-                disableBoard();
-                return;
-            }
-        }
+const winningCombos = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8],
+    [0, 3, 6], [1, 4, 7], [2, 5, 8],
+    [0, 4, 8], [2, 4, 6]
+];
 
-        if (!board.includes("")) {
-            gameActive = false;
-            status.innerText = "It's a Draw!";
-            statusCard.style.display = "flex"; // Show status card
-        }
-    }
-
-    function disableBoard() {
-        cells.forEach(cell => cell.disabled = true);
-    }
-
-    function handleCellClick(event) {
-        const index = event.target.id;
-        if (!gameActive || board[index] !== "") return;
-
-        board[index] = currentPlayer;
-        event.target.innerText = currentPlayer;
-
-        checkWinner();
-
-        currentPlayer = currentPlayer === "X" ? "O" : "X";
-    }
-
-    function restartGame() {
-        board = ["", "", "", "", "", "", "", "", ""];
-        gameActive = true;
-        currentPlayer = "X";
-        statusCard.style.display = "none"; // Hide status card
-        cells.forEach(cell => {
-            cell.innerText = "";
-            cell.disabled = false;
-        });
-    }
-
-    cells.forEach(cell => cell.addEventListener("click", handleCellClick));
-    restartBtn.addEventListener("click", restartGame);
-
-    // SignalR Setup
-    const connection = new signalR.HubConnectionBuilder().withUrl("/gameHub").build();
-
-    connection.start().then(() => {
-        cells.forEach((cell, index) => {
-            cell.addEventListener("click", function () {
-                if (board[index] === "" && gameActive) {
-                    connection.invoke("MakeMove", index, currentPlayer);
-                }
-            });
-        });
-
-        connection.on("ReceiveMove", (index, player) => {
-            board[index] = player;
-            cells[index].textContent = player;
-            checkWinner();
-            currentPlayer = currentPlayer === "X" ? "O" : "X";
-        });
-    }).catch(err => console.error(err));
+cells.forEach(cell => {
+    cell.addEventListener("click", () => handleCellClick(cell));
 });
+
+restartBtn.addEventListener("click", resetGame);
+aiToggleBtn.addEventListener("click", toggleAI);
+
+function handleCellClick(cell) {
+    const index = parseInt(cell.id);
+    if (boardState[index] !== "" || checkWinner()) return;
+
+    boardState[index] = currentPlayer;
+    cell.textContent = currentPlayer;
+
+    if (checkWinner()) {
+        updateScore(currentPlayer);
+        alert(`${currentPlayer} wins!`);
+        return;
+    }
+
+    if (!boardState.includes("")) {
+        updateScore("draw");
+        alert("It's a draw!");
+        return;
+    }
+
+    currentPlayer = currentPlayer === "🐱" ? "🐶" : "🐱";
+
+    if (aiEnabled && currentPlayer === "🐶") {
+        setTimeout(aiMove, 500);
+    }
+}
+
+function aiMove() {
+    let emptyCells = boardState.map((val, idx) => val === "" ? idx : null).filter(val => val !== null);
+    if (emptyCells.length === 0) return;
+
+    let randomMove = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+    boardState[randomMove] = "🐶";
+    cells[randomMove].textContent = "🐶";
+
+    if (checkWinner()) {
+        updateScore("🐶");
+        alert("🐶 wins!");
+        return;
+    }
+
+    if (!boardState.includes("")) {
+        updateScore("draw");
+        alert("It's a draw!");
+        return;
+    }
+
+    currentPlayer = "🐱";
+}
+
+function checkWinner() {
+    return winningCombos.some(combo => {
+        const [a, b, c] = combo;
+        return boardState[a] !== "" && boardState[a] === boardState[b] && boardState[a] === boardState[c];
+    });
+}
+
+function updateScore(winner) {
+    if (winner === "draw") {
+        scores.draw++;
+        drawScoreEl.textContent = scores.draw;
+        statusText.textContent = "It's a draw!";
+    } else {
+        scores[winner === "🐱" ? "cat" : "dog"]++;
+        catScoreEl.textContent = scores.cat;
+        dogScoreEl.textContent = scores.dog;
+        statusText.textContent = `${winner} wins!`;
+    }
+    statusCard.classList.remove("hidden");
+}
+
+function resetGame() {
+    boardState = ["", "", "", "", "", "", "", "", ""];
+    cells.forEach(cell => cell.textContent = "");
+    currentPlayer = "🐱";
+    statusCard.classList.add("hidden");
+}
+
+function toggleAI() {
+    aiEnabled = !aiEnabled;
+    aiToggleBtn.textContent = aiEnabled ? "Playing vs AI" : "Playing vs Player";
+    resetGame();
+}

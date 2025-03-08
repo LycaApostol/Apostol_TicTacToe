@@ -1,7 +1,24 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-<div>
+
+<!-- Game Container -->
+<div class="game-container">
+    <h1 class="game-title">Tic-Tac-Toe</h1>
+
+    <!-- Scoreboard -->
+    <div class="scoreboard">
+        <div class="score">🐱 Cat: <span id="cat-score">0</span></div>
+        <div class="score">🐶 Dog: <span id="dog-score">0</span></div>
+        <div class="score">➖ Draws: <span id="draw-score">0</span></div>
+    </div>
+
+    <!-- AI Toggle -->
+    <div class="center-container">
+        <button id="ai-toggle" class="btn">Playing vs Player</button>
+    </div>
+
+    <!-- Game Board -->
     <div id="board" class="d-grid">
         <button class="cell" id="0"></button>
         <button class="cell" id="1"></button>
@@ -14,14 +31,14 @@
         <button class="cell" id="8"></button>
     </div>
 
-    <!-- Status Card (Hidden by Default) -->
-    <div id="status-card" class="status-card">
+    <!-- Status Card -->
+    <div id="status-card" class="hidden">
         <p id="status">Game Status Here</p>
     </div>
 
-    <!-- Centered Restart Button -->
-    <div style="display: flex; justify-content: center; margin-top: 20px;">
-        <button id="restart" class="btn btn-primary">Restart</button>
+    <!-- Restart Button -->
+    <div class="center-container">
+        <button id="restart" class="btn">Restart</button>
     </div>
 </div>
 
